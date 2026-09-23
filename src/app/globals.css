@@ -1,26 +1,195 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------
+   Design tokens — dark by default, overridden for the light theme.
+   --------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #07080d;
+  --bg-soft: #0b0d14;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-strong: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --fg: #e8eaf2;
+  --fg-muted: #98a1b4;
+  --fg-faint: #5f6878;
+  --accent: #22d3ee;
+  --accent-2: #a78bfa;
+  --accent-3: #f472b6;
+  --glow: 0 0 60px -12px color-mix(in oklab, var(--accent) 55%, transparent);
+  --grid-line: rgba(255, 255, 255, 0.045);
+}
+
+:root[data-theme="light"] {
+  --bg: #f7f8fb;
+  --bg-soft: #ffffff;
+  --surface: rgba(10, 12, 20, 0.025);
+  --surface-strong: rgba(10, 12, 20, 0.05);
+  --border: rgba(10, 12, 20, 0.1);
+  --border-strong: rgba(10, 12, 20, 0.2);
+  --fg: #11141c;
+  --fg-muted: #4d5666;
+  --fg-faint: #858e9e;
+  --accent: #0891b2;
+  --accent-2: #7c3aed;
+  --accent-3: #db2777;
+  --glow: 0 0 60px -18px color-mix(in oklab, var(--accent) 45%, transparent);
+  --grid-line: rgba(10, 12, 20, 0.05);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-faint: var(--fg-faint);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-sora);
+  --font-mono: var(--font-mono-jb);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 35%, transparent);
+  color: var(--fg);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--fg) 18%, transparent);
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover { background: color-mix(in oklab, var(--accent) 60%, transparent); }
+
+/* Theme-toggle icons: CSS decides which one shows, so the button needs no state. */
+:root[data-theme="dark"] .icon-when-light,
+:root[data-theme="light"] .icon-when-dark {
+  display: none;
+}
+
+/* --------------------------- utilities --------------------------- */
+@utility text-gradient {
+  background-image: linear-gradient(110deg, var(--accent) 0%, var(--accent-2) 48%, var(--accent-3) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  backdrop-filter: blur(12px);
+}
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Animated gradient border used on the photo frame + featured cards */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.conic-ring {
+  position: relative;
+  isolation: isolate;
+}
+.conic-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--angle),
+    var(--accent),
+    var(--accent-2),
+    var(--accent-3),
+    var(--accent)
+  );
+  /* Punch out the middle so only the border ring paints, whatever sits behind. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: spin-ring 6s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes spin-ring {
+  to { --angle: 360deg; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -22px, 0) scale(1.05); }
+}
+.float-slow { animation: float-slow 11s ease-in-out infinite; }
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.caret { animation: blink 1.05s steps(1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .conic-ring::before,
+  .marquee-track,
+  .float-slow,
+  .caret {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
 }
