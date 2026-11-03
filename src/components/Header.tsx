@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { CodeXml, Menu, Moon, Sun, X } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { useEffect, useState } from "react";
 import { navLinks, profile } from "@/data/profile";
@@ -69,7 +69,9 @@ export default function Header() {
       <nav className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <a href="#top" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <span className="bg-gradient grid size-9 place-items-center rounded-xl font-display text-sm font-bold text-white shadow-lg shadow-primary/30">
-            AR
+            {/* phones get a developer mark in place of the initials */}
+            <CodeXml className="size-5 sm:hidden" strokeWidth={2.5} />
+            <span className="hidden sm:inline">AR</span>
           </span>
           <span className="hidden font-display text-lg font-semibold sm:block">{profile.name}</span>
         </a>

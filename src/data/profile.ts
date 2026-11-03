@@ -1,3 +1,4 @@
+import type { Art } from "@/components/ProjectArt";
 import type { LucideIcon } from "lucide-react";
 import {
   Bot,
@@ -231,6 +232,7 @@ export const projects: {
   metric: string;
   stack: string[];
   flow: string[];
+  art: Art;
 }[] = [
   {
     icon: Network,
@@ -246,6 +248,7 @@ export const projects: {
     metric: "Multi-agent + human review",
     stack: ["FastAPI", "Azure OpenAI", "RAG", "ChromaDB", "Pydantic"],
     flow: ["Requirement", "Builder agents", "Reviewer agent ≤3×", "Human review ≤2×", "Saved"],
+    art: "agents",
   },
   {
     icon: ShieldCheck,
@@ -261,6 +264,7 @@ export const projects: {
     metric: "Cited answers only",
     stack: ["FastAPI", "Azure OpenAI", "RAG", "Pinecone", "BM25", "OCR"],
     flow: ["Question", "Query planner", "Dense + BM25", "Rerank", "Gates", "Cited answer"],
+    art: "rag",
   },
   {
     icon: Eye,
@@ -276,6 +280,7 @@ export const projects: {
     metric: "91% accuracy",
     stack: ["Python", "TensorFlow", "CNN", "OpenCV"],
     flow: ["Camera frame", "Preprocess", "CNN", "Organic / Non-organic"],
+    art: "vision",
   },
   {
     icon: Brain,
@@ -290,6 +295,7 @@ export const projects: {
     metric: "87% accuracy",
     stack: ["Python", "RNN / LSTM", "TensorFlow", "NLP"],
     flow: ["Typed text", "Tokenise & pad", "LSTM", "Next word"],
+    art: "text",
   },
 ];
 

@@ -1,13 +1,13 @@
 import { ArrowDown, ArrowUpRight, Download, GraduationCap, Mail, MapPin, Phone, Sparkles } from "lucide-react";
 import CopyEmail from "@/components/CopyEmail";
 import Header from "@/components/Header";
+import ProjectCarousel from "@/components/ProjectCarousel";
 import Reveal from "@/components/Reveal";
 import {
   education,
   experience,
   focus,
   profile,
-  projects,
   skills,
 } from "@/data/profile";
 
@@ -65,27 +65,6 @@ function Section({
       </Reveal>
       <div className="mt-12 md:mt-16">{children}</div>
     </section>
-  );
-}
-
-function Flow({ steps }: { steps: string[] }) {
-  return (
-    <ol className="flex flex-wrap items-center gap-y-2 font-mono text-[11px] text-ink-2">
-      {steps.map((s, i) => (
-        <li key={s} className="flex items-center">
-          <span
-            className={`rounded-md border px-2 py-1 ${
-              i === steps.length - 1
-                ? "border-transparent bg-gradient font-semibold text-white"
-                : "border-rule bg-bg"
-            }`}
-          >
-            {s}
-          </span>
-          {i < steps.length - 1 && <span className="px-1.5 text-primary">→</span>}
-        </li>
-      ))}
-    </ol>
   );
 }
 
@@ -374,44 +353,9 @@ export default function Home() {
           title={<>Selected <span className="text-gradient">projects</span></>}
           intro="Agents, retrieval and models, each built with guardrails and an honest metric."
         >
-          <div className="grid gap-6 lg:grid-cols-2">
-            {projects.map((p, i) => (
-              <Reveal key={p.title} delay={(i % 2) * 0.1} className="glow-card flex flex-col overflow-hidden rounded-3xl">
-                <div className="bg-gradient h-1.5" />
-                <div className="flex flex-1 flex-col p-6 sm:p-8">
-                  <div className="flex items-start justify-between gap-4">
-                    <span className="grid size-12 place-items-center rounded-2xl bg-primary/10 text-primary">
-                      <p.icon className="size-6" />
-                    </span>
-                    <span className="rounded-full bg-gradient px-3 py-1 text-xs font-bold text-white shadow-md shadow-primary/30">
-                      {p.metric}
-                    </span>
-                  </div>
-                  <p className={`${mono} mt-6 text-ink-3`}>
-                    P.{String(i + 1).padStart(2, "0")} · {p.tag}
-                  </p>
-                  <h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">{p.title}</h3>
-                  <p className="mt-3 text-ink-2">{p.summary}</p>
-                  <ul className="mt-5 space-y-2 text-sm text-ink-2">
-                    {p.highlights.map((h) => (
-                      <li key={h} className="flex gap-2.5">
-                        <span className="text-primary">✓</span>
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-6 rounded-xl border border-rule bg-surface-2/60 p-3">
-                    <Flow steps={p.flow} />
-                  </div>
-                  <div className="mt-auto flex flex-wrap gap-1.5 pt-6">
-                    {p.stack.map((s) => (
-                      <span key={s} className={chip}>{s}</span>
-                    ))}
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal>
+            <ProjectCarousel />
+          </Reveal>
         </Section>
 
         <Section id="education" index="05" label="Education" title={<>Where I <span className="text-gradient">learned</span></>}>
