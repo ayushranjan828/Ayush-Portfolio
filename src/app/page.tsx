@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUpRight, Download, GraduationCap, Mail, MapPin, Phone, Sparkles } from "lucide-react";
 import CopyEmail from "@/components/CopyEmail";
 import Header from "@/components/Header";
+import MathGraph from "@/components/MathGraph";
 import ProjectCarousel from "@/components/ProjectCarousel";
 import Reveal from "@/components/Reveal";
 import {
@@ -72,39 +73,6 @@ const stack = [
   "LangGraph", "FastAPI", "Azure OpenAI", "LangChain", "Pinecone", "ChromaDB",
   "Hugging Face", "TensorFlow", "Pydantic", "OpenCV", "Docker", "MCP",
 ];
-
-// one heartbeat every 300 units: flat, P wave, QRS spike, T wave
-const ecgPath =
-  "M0 60" +
-  [0, 300, 600, 900]
-    .map(
-      (o) =>
-        ` L${o + 90} 60 Q${o + 105} 48 ${o + 120} 60 L${o + 135} 60 L${o + 142} 72 L${o + 152} 10` +
-        ` L${o + 162} 104 L${o + 170} 60 L${o + 190} 60 Q${o + 212} 40 ${o + 234} 60 L${o + 300} 60`,
-    )
-    .join("");
-
-/** Heart-monitor trace: a faint ECG line with a bright pulse sweeping across it. */
-function Heartbeat() {
-  return (
-    <div className="mt-14" aria-hidden>
-      <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-16 w-full md:h-24">
-        <path d={ecgPath} pathLength={1000} fill="none" stroke="var(--pulse-dim)" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
-        <path
-          d={ecgPath}
-          pathLength={1000}
-          className="ecg-pulse"
-          fill="none"
-          stroke="var(--pulse)"
-          strokeWidth={2.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-    </div>
-  );
-}
 
 function Hero() {
   const [lead, last] = [
@@ -208,7 +176,10 @@ function Hero() {
         </div>
       </div>
 
-      <Heartbeat />
+      {/* full-bleed: breaks out of the container to span the viewport edge to edge */}
+      <div className="rise mx-[calc(50%-50vw)] mt-14" style={{ "--d": "0.48s" } as React.CSSProperties}>
+        <MathGraph />
+      </div>
     </section>
   );
 }

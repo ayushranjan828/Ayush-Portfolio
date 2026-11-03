@@ -151,17 +151,6 @@ body {
 }
 .rise { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s) both; }
 
-/* heart-monitor pulse: a 140-unit glowing segment sweeps the 1000-unit trace */
-@keyframes ecg-sweep {
-  from { stroke-dashoffset: 1140; }
-  to { stroke-dashoffset: 0; }
-}
-.ecg-pulse {
-  stroke-dasharray: 140 1000;
-  animation: ecg-sweep 4s linear infinite;
-  filter: drop-shadow(0 0 3px var(--pulse)) drop-shadow(0 0 10px var(--pulse));
-}
-
 /* police-siren edge lights: each colour double-flashes, blue runs half a cycle behind red */
 @keyframes siren {
   0%, 34%, 100% { opacity: calc(var(--siren-max) * 0.2); }
@@ -187,7 +176,7 @@ body {
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track, .ecg-pulse, .ring-spin, .float, .rise, .siren { animation: none; }
+  .marquee-track, .ring-spin, .float, .rise, .siren { animation: none; }
   .siren { opacity: calc(var(--siren-max) * 0.5); }
   html { scroll-behavior: auto; }
 }
