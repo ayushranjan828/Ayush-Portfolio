@@ -1,78 +1,149 @@
 @import "tailwindcss";
 
+/* theme is driven by data-theme on <html>, set before paint by the script in layout.tsx */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  --paper: #f4f1ea;
-  --paper-2: #ebe7dd;
-  --ink: #16150f;
-  --ink-2: #4a473d;
-  --ink-3: #7d796c;
-  --rule: #d6d1c4;
-  --accent: #d9481c;
-  --accent-soft: #f6dccf;
+  --bg: #f6f6fc;
+  --surface: #ffffff;
+  --surface-2: #eeeef9;
+  --ink: #0c0e1d;
+  --ink-2: #454a66;
+  --ink-3: #767b98;
+  --rule: #e1e2f0;
+  --primary: #6a45ff;
+  --secondary: #0891b2;
+  --warm: #f0612e;
+  --glow: rgba(106, 69, 255, 0.18);
+  --pulse: #d1001f;
+  --pulse-dim: rgba(209, 0, 31, 0.16);
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #12110e;
-    --paper-2: #1b1a16;
-    --ink: #f1ede3;
-    --ink-2: #bdb8aa;
-    --ink-3: #87826f;
-    --rule: #2e2c25;
-    --accent: #ff7a45;
-    --accent-soft: #3a1f13;
-  }
+[data-theme="dark"] {
+  --bg: #070812;
+  --surface: #0e1022;
+  --surface-2: #161936;
+  --ink: #eef0ff;
+  --ink-2: #aab0d0;
+  --ink-3: #737896;
+  --rule: #23264a;
+  --primary: #8f78ff;
+  --secondary: #22d3ee;
+  --warm: #ff8a5c;
+  --glow: rgba(143, 120, 255, 0.28);
+  --pulse: #ff2340;
+  --pulse-dim: rgba(255, 35, 64, 0.18);
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-paper-2: var(--paper-2);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
   --color-ink-3: var(--ink-3);
   --color-rule: var(--rule);
-  --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-warm: var(--warm);
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-serif: var(--font-instrument), Georgia, serif;
+  --font-display: var(--font-bricolage), var(--font-geist), sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 88px;
 }
 
 body {
-  background: var(--paper);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--paper);
+  background: var(--primary);
+  color: #fff;
 }
 
-/* faint drafting grid behind the hero */
-.grid-paper {
-  background-image:
-    linear-gradient(var(--rule) 1px, transparent 1px),
-    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: linear-gradient(to bottom, black 30%, transparent);
+.text-gradient {
+  background: linear-gradient(100deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-/* hand-drawn underline under the name, drawn once on load */
-@keyframes draw {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
+.bg-gradient {
+  background: linear-gradient(100deg, var(--primary), var(--secondary));
 }
-.name-underline {
-  stroke-dasharray: 1;
-  animation: draw 1.2s 0.3s ease-out both;
+
+/* soft colour blobs behind the hero */
+.aurora {
+  background:
+    radial-gradient(40% 50% at 15% 20%, var(--glow), transparent 70%),
+    radial-gradient(35% 45% at 85% 30%, color-mix(in srgb, var(--secondary) 20%, transparent), transparent 70%),
+    radial-gradient(30% 40% at 60% 90%, color-mix(in srgb, var(--warm) 12%, transparent), transparent 70%);
 }
+
+/* dotted grid that fades out downwards */
+.dot-grid {
+  background-image: radial-gradient(var(--rule) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(to bottom, black 20%, transparent 85%);
+}
+
+/* card whose border lights up with the brand gradient on hover */
+.glow-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.glow-card:hover {
+  transform: translateY(-4px);
+  border-color: transparent;
+  box-shadow: 0 20px 50px -20px var(--glow);
+}
+.glow-card:hover::before { opacity: 1; }
+
+/* spinning gradient ring around the hero card */
+@keyframes spin { to { transform: rotate(360deg); } }
+.ring-spin {
+  background: conic-gradient(from 0deg, var(--primary), var(--secondary), var(--warm), var(--primary));
+  animation: spin 8s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float { animation: float 5s ease-in-out infinite; }
+
+/* hero entrance, staggered via --d */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+.rise { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s) both; }
 
 /* heart-monitor pulse: a 140-unit glowing segment sweeps the 1000-unit trace */
 @keyframes ecg-sweep {
@@ -82,17 +153,18 @@ body {
 .ecg-pulse {
   stroke-dasharray: 140 1000;
   animation: ecg-sweep 4s linear infinite;
-  filter: drop-shadow(0 0 6px var(--accent));
+  filter: drop-shadow(0 0 3px var(--pulse)) drop-shadow(0 0 10px var(--pulse));
 }
 
 /* tech ticker: the list is rendered twice, so sliding by half loops seamlessly */
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
-.marquee-track { animation: marquee 40s linear infinite; padding-left: 2.5rem; }
+.marquee { mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent); }
+.marquee-track { animation: marquee 40s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track, .ecg-pulse, .name-underline { animation: none; }
+  .marquee-track, .ecg-pulse, .ring-spin, .float, .rise { animation: none; }
   html { scroll-behavior: auto; }
 }
