@@ -139,9 +139,9 @@ export default function MathGraph() {
   const dotColor = `color-mix(in srgb, var(--siren-blue) ${blue}%, var(--siren-red))`;
 
   return (
-    // no border and a see-through surface, so the siren light behind the page shows through the grid
+    // no border or surface: the grid sits straight on the page and fades out at the top and bottom
     <div className="overflow-hidden">
-      <div ref={box} className="relative bg-surface/25 py-4 backdrop-blur-[2px]">
+      <div ref={box} className="relative py-4">
         <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`${g.name}: ${g.formula}`}>
           <defs>
             {/* red on the left fading to blue on the right, matching the siren lights behind the page */}
@@ -157,19 +157,31 @@ export default function MathGraph() {
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+            {/* fades the grid and axes to nothing at the top and bottom edges, so there's no hard line */}
+            <linearGradient id="grid-fade" x1={0} x2={0} y1={0} y2={1}>
+              <stop offset="0" stopColor="#fff" stopOpacity={0} />
+              <stop offset="0.25" stopColor="#fff" stopOpacity={1} />
+              <stop offset="0.75" stopColor="#fff" stopOpacity={1} />
+              <stop offset="1" stopColor="#fff" stopOpacity={0} />
+            </linearGradient>
+            <mask id="grid-mask">
+              <rect width={W} height={H} fill="url(#grid-fade)" />
+            </mask>
           </defs>
 
-          {/* grid */}
-          {Array.from({ length: Math.floor(W / CELL) + 1 }, (_, i) => (
-            <line key={`v${i}`} x1={CELL * i} x2={CELL * i} y1={0} y2={H} stroke="var(--rule)" strokeOpacity={0.55} strokeWidth={1} />
-          ))}
-          {Array.from({ length: 9 }, (_, i) => (
-            <line key={`h${i}`} x1={0} x2={W} y1={(H / 8) * i} y2={(H / 8) * i} stroke="var(--rule)" strokeOpacity={0.55} strokeWidth={1} />
-          ))}
+          <g mask="url(#grid-mask)">
+            {/* grid */}
+            {Array.from({ length: Math.floor(W / CELL) + 1 }, (_, i) => (
+              <line key={`v${i}`} x1={CELL * i} x2={CELL * i} y1={0} y2={H} stroke="var(--rule)" strokeOpacity={0.55} strokeWidth={1} />
+            ))}
+            {Array.from({ length: 9 }, (_, i) => (
+              <line key={`h${i}`} x1={0} x2={W} y1={(H / 8) * i} y2={(H / 8) * i} stroke="var(--rule)" strokeOpacity={0.55} strokeWidth={1} />
+            ))}
 
-          {/* axes */}
-          <line x1={0} x2={W} y1={sy(0)} y2={sy(0)} stroke="var(--ink-3)" strokeWidth={1.5} />
-          <line x1={sx(0)} x2={sx(0)} y1={0} y2={H} stroke="var(--ink-3)" strokeWidth={1.5} />
+            {/* axes */}
+            <line x1={0} x2={W} y1={sy(0)} y2={sy(0)} stroke="var(--ink-3)" strokeWidth={1.5} />
+            <line x1={sx(0)} x2={sx(0)} y1={0} y2={H} stroke="var(--ink-3)" strokeWidth={1.5} />
+          </g>
 
           {ref && (
             <path d={path(ref)} fill="none" stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="6 6" opacity={0.7} />
