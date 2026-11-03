@@ -142,7 +142,7 @@ function Hero() {
             <a href="#projects" className={btnSolid}>
               View projects <ArrowDown className="size-4" />
             </a>
-            <a href="/resume.pdf" className={btnLine} download>
+            <a href={`${process.env.NEXT_PUBLIC_BASE_PATH}/resume.pdf`} className={btnLine} download>
               <Download className="size-4" /> Download résumé
             </a>
           </div>
