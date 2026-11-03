@@ -162,7 +162,8 @@ function Hero() {
               </pre>
             </div>
           </div>
-          <div className="bg-gradient absolute -inset-6 -z-10 rounded-full opacity-30 blur-3xl" aria-hidden />
+          {/* stays inside the card's width on phones so it can't push the page sideways */}
+          <div className="bg-gradient absolute -inset-y-6 inset-x-0 -z-10 rounded-full opacity-30 blur-3xl sm:-inset-6" aria-hidden />
 
           <span className="float absolute -top-4 -left-2 inline-flex items-center gap-1.5 rounded-full border border-rule bg-surface/90 px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur sm:-left-8">
             <Sparkles className="size-3.5 text-primary" /> RAG & Agents
@@ -193,7 +194,11 @@ export default function Home() {
         <div className="siren siren-blue absolute inset-0" />
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[900px] overflow-hidden" aria-hidden>
+      {/* faded out at the bottom so the glow doesn't end in a hard line across the hero graph */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[900px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+        aria-hidden
+      >
         <div className="aurora absolute inset-0" />
         <div className="dot-grid absolute inset-0" />
       </div>
