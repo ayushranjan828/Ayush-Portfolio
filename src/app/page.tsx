@@ -108,20 +108,22 @@ const ecgPath =
 /** Heart-monitor trace: a faint ECG line with a bright pulse sweeping across it. */
 function Heartbeat() {
   return (
-    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="mt-14 h-16 w-full md:h-24" aria-hidden>
-      <path d={ecgPath} pathLength={1000} fill="none" stroke="var(--pulse-dim)" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
-      <path
-        d={ecgPath}
-        pathLength={1000}
-        className="ecg-pulse"
-        fill="none"
-        stroke="var(--pulse)"
-        strokeWidth={2.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        vectorEffect="non-scaling-stroke"
-      />
-    </svg>
+    <div className="mt-14" aria-hidden>
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-16 w-full md:h-24">
+        <path d={ecgPath} pathLength={1000} fill="none" stroke="var(--pulse-dim)" strokeWidth={1.5} vectorEffect="non-scaling-stroke" />
+        <path
+          d={ecgPath}
+          pathLength={1000}
+          className="ecg-pulse"
+          fill="none"
+          stroke="var(--pulse)"
+          strokeWidth={2.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </div>
   );
 }
 
@@ -235,6 +237,12 @@ function Hero() {
 export default function Home() {
   return (
     <>
+      {/* police-siren ambience: red and blue light glowing in from the screen edges on every scroll position */}
+      <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden>
+        <div className="siren siren-red absolute inset-0" />
+        <div className="siren siren-blue absolute inset-0" />
+      </div>
+
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[900px] overflow-hidden" aria-hidden>
         <div className="aurora absolute inset-0" />
         <div className="dot-grid absolute inset-0" />

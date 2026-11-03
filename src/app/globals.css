@@ -17,6 +17,9 @@
   --glow: rgba(106, 69, 255, 0.18);
   --pulse: #d1001f;
   --pulse-dim: rgba(209, 0, 31, 0.16);
+  --siren-red: #ff1f3d;
+  --siren-blue: #1f5bff;
+  --siren-max: 0.35;
   color-scheme: light;
 }
 
@@ -34,6 +37,9 @@
   --glow: rgba(143, 120, 255, 0.28);
   --pulse: #ff2340;
   --pulse-dim: rgba(255, 35, 64, 0.18);
+  --siren-red: #ff1f3d;
+  --siren-blue: #2f7bff;
+  --siren-max: 0.5;
   color-scheme: dark;
 }
 
@@ -156,6 +162,22 @@ body {
   filter: drop-shadow(0 0 3px var(--pulse)) drop-shadow(0 0 10px var(--pulse));
 }
 
+/* police-siren edge lights: each colour double-flashes, blue runs half a cycle behind red */
+@keyframes siren {
+  0%, 34%, 100% { opacity: calc(var(--siren-max) * 0.2); }
+  7%, 23% { opacity: var(--siren-max); }
+  15% { opacity: calc(var(--siren-max) * 0.35); }
+}
+.siren { animation: siren 2.2s ease-in-out infinite; }
+/* each beam spans the full width and reaches past the centre, so the two lights meet in the middle */
+.siren-red {
+  background: radial-gradient(80% 95% at 0% 50%, var(--siren-red), color-mix(in srgb, var(--siren-red) 45%, transparent) 60%, transparent 100%);
+}
+.siren-blue {
+  background: radial-gradient(80% 95% at 100% 50%, var(--siren-blue), color-mix(in srgb, var(--siren-blue) 45%, transparent) 60%, transparent 100%);
+  animation-delay: -1.1s;
+}
+
 /* tech ticker: the list is rendered twice, so sliding by half loops seamlessly */
 @keyframes marquee {
   to { transform: translateX(-50%); }
@@ -165,6 +187,7 @@ body {
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track, .ecg-pulse, .ring-spin, .float, .rise { animation: none; }
+  .marquee-track, .ecg-pulse, .ring-spin, .float, .rise, .siren { animation: none; }
+  .siren { opacity: calc(var(--siren-max) * 0.5); }
   html { scroll-behavior: auto; }
 }
